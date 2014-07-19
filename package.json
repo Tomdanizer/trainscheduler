@@ -1,0 +1,30 @@
+{
+  "name": "trainscheduler",
+  "version": "0.0.0",
+  "description": "trainscheduler for wellspring",
+  "main": "web.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Tomdanizer/trainscheduler.git"
+  },
+  "keywords": [
+    "heroku",
+    "trainscheduler"
+  ],
+  "author": "Dan Thomiszer",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Tomdanizer/trainscheduler/issues"
+  },
+  "homepage": "https://github.com/Tomdanizer/trainscheduler",
+  "dependencies": {
+    "express": "^4.6.1",
+    "logfmt": "^1.1.2"
+  },
+  "engines": {
+        "node": "0.10.29"
+   }
+}
