@@ -1,5 +1,18 @@
 extends layout
 
 block content
-  h1= title
-  p Welcome to #{title}
+    .container-fluid
+        .row
+            .col-xs-12.col-sm-12.col-md-12.col-lg-12
+                .pull-left
+                    h1= title
+                .pull-right
+                    div Drag/Drop/Upload Input
+        .row
+            .col-xs-12.col-sm-12.col-md-12.col-lg-12
+                .text-center Status Updates
+
+        .row
+            include tables/traintable
+
+
