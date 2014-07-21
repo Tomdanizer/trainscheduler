@@ -16,12 +16,37 @@ router.get('/', function(req, res) {
         // Respond with results as JSON
         res.render('index', {   
                                 title: 'Train Scheduler',
-                                trainSchedules: schedules
+                                trainSchedules: ""
                             }
         );
     });
 });
-
+router.get('/data.json', function(req, res) {
+    db.getAll(function(err, schedules) {
+        console.log(schedules);
+        if(err) { 
+            res.send(500,"Server Error"); 
+                 return;
+            }
+        // Respond with results as JSON
+        var obj = {};
+        obj.data = schedules;
+        res.send(obj);
+    });
+});
+router.post('/data.json', function(req, res) {
+    db.getAll(function(err, schedules) {
+        console.log(schedules);
+        if(err) { 
+            res.send(500,"Server Error"); 
+                 return;
+            }
+        // Respond with results as JSON
+        var obj = {};
+        obj.data = schedules;
+        res.send(obj);
+    });
+});
 router.post('/upload', function(req, res,next){
 var fstream, fileExtension, filepath;
         req.pipe(req.busboy);
