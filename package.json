@@ -31,7 +31,10 @@
     "morgan": "~1.0.0",
     "mysql": "^2.4.1",
     "static-favicon": "~1.0.0",
-    "stylus": "0.42.3"
+    "stylus": "0.42.3",
+    "mocha": "^1.20.1",
+    "superagent": "^0.18.2",
+    "expect.js": "^0.3.1"
   },
   "engines": {
     "node": "0.10.29"
