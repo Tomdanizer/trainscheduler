@@ -23,7 +23,7 @@ router.get('/', function(req, res) {
 });
 
 router.post('/upload', function(req, res,next){
-var fstream, fileExtension;
+var fstream, fileExtension, filepath;
         req.pipe(req.busboy);
         req.busboy.on('file', function (fieldname, file, filename,  encoding, mimetype) {
             console.log("Uploading: " + filename);
@@ -38,11 +38,23 @@ var fstream, fileExtension;
                 //Mime type is of CSV type
 
                 //Path where file will be uploaded.
-                fstream = fs.createWriteStream('./public/uploaded/' + filename);
+                filepath = './public/uploaded/' + filename;
+                fstream = fs.createWriteStream(filepath);
                 file.pipe(fstream);
                 fstream.on('close', function () {    
-                    console.log("Upload Finished of " + filename);              
-                    res.redirect('back');           //where to go next
+                    console.log("Upload Finished of " + filename);
+                    db.loadCSV(filepath, function(err, results) {
+                        if(err) {
+                            res.send(500,"Server Error");
+                            return;
+                        }
+                        // Respond with results as JSON
+                        res.render('index', {
+                                title: 'Train success',
+                                trainSchedules: schedules
+                            }
+                        );
+                    });
                 });
             }else{
                 //Not a CSV, error
