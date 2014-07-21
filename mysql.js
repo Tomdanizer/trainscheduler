@@ -35,7 +35,7 @@ exports.loadCSV = function(filename, callback) {
 
 /* SELECT STATEMENTS */
 exports.getAll = function(callback) {
-    var sql = "SELECT * FROM trains;";
+    var sql = "SELECT * FROM trains order by train_run, train_line, train_route;";
 
     // get a connection from the pool
     pool.getConnection(function(err, connection) {

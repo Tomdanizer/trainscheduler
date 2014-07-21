@@ -1,19 +1,23 @@
 form#schedule_form.table.form-list(action='/', method='POST', role='form')
-div.table-responsive: table#schedule_table.table.table-hover.table-striped
-        thead
-            tr
-                th Train
-                th Route
-                th Run
-                th Operator
-                th Delete
-
-        tbody
-            each schedule in trainSchedules
+    div.table-responsive: table#schedule_table.table.table-hover.table-striped
+            thead
                 tr
-                    td= schedule.train_line
-                    td= schedule.train_route
-                    td= schedule.train_run
-                    td= schedule.train_operator
-                    td: input(name=schedule.id type='checkbox', value='')
+                    th Train
+                    th Route
+                    th Run
+                    th Operator
+                    th Delete
+
+            tbody
+                each schedule in trainSchedules
+                    tr
+                        td= schedule.train_line
+                        td= schedule.train_route
+                        td= schedule.train_run
+                        td= schedule.train_operator
+                        td: input(name=schedule.id type='checkbox', value='')
+    .pull-right
+        .btn-toolbar
+            button(type="button").btn.btn-success Add
+            button(type="button").btn.btn-primary Save
                         

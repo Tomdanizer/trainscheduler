@@ -48,12 +48,25 @@ var fstream, fileExtension, filepath;
                             res.send(500,"Server Error");
                             return;
                         }
+
+                        console.log(results);
                         // Respond with results as JSON
-                        res.render('index', {
-                                title: 'Train success',
-                                trainSchedules: schedules
+                        db.getAll(function(err, schedules) {
+                            console.log(schedules);
+                            if(err) {
+                                res.send(500,"Server Error");
+                                return;
                             }
-                        );
+                            // Respond with results as JSON
+                            res.render('tables/traintable', {trainSchedules: schedules}, function(err, html){
+                                var htmlObj = {};
+                                htmlObj.schedulesHTML = html;
+                                res.render('status', {status: "Total " + results.message.replace("/", "") + " Updated: " + results.affectedRows}, function(err, html){
+                                    htmlObj.statusHTML = html;
+                                    res.send(htmlObj);
+                                });
+                            });
+                        });
                     });
                 });
             }else{

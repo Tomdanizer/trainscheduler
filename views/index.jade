@@ -8,11 +8,10 @@ block content
                     h1= title
                 .pull-right
                     form(action="/upload", method="post", enctype="multipart/form-data")
-                        input(type="file", accept=".csv" name="displayImage")
-                        button(type="submit") Submit
-        .row
-            .col-xs-12.col-sm-12.col-md-12.col-lg-12
-                .text-center Status Updates
-
-        .row
+                        span.btn.btn-success.btn-file
+                            i.glyphicon.glyphicon-plus
+                            span  Upload CSV
+                            input#file_upload(type="file", accept=".csv" name="uploadCSV")
+        include status
+        #schedule_container.row
             include tables/traintable
