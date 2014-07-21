@@ -7,12 +7,12 @@ block content
                 .pull-left
                     h1= title
                 .pull-right
-                    div Drag/Drop/Upload Input
+                    form(action="/upload", method="post", enctype="multipart/form-data")
+                        input(type="file", accept=".csv" name="displayImage")
+                        button(type="submit") Submit
         .row
             .col-xs-12.col-sm-12.col-md-12.col-lg-12
                 .text-center Status Updates
 
         .row
             include tables/traintable
-
-
