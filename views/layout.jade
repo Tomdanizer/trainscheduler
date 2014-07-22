@@ -11,6 +11,32 @@ html
     script(src="/jquery/jquery-2.1.1.min.js")
     script(src="//cdn.datatables.net/1.10.1/js/jquery.dataTables.min.js")
     script(src="/bootstrap/js/bootstrap.min.js")
+    script(src="/js/underscore-min.js")
     script(src="/js/upload.js")
     script(src="/js/datatable.js")
     script(src="/js/index.js")
+    script#modal_template(type='text/template' class="template")
+        <div id="modal_<%= type %>" class="modal fade">
+        <form id="form_<%= type %>">
+        .modal-dialog
+            .modal-content
+                .modal-header
+                    button.close(type='button', data-dismiss='modal', aria-hidden='true') &times;
+                    h4.modal-title <%= title %>
+                .modal-body
+                    label(for="train") Train Line:
+                    <input type="text" name="train" id="train" value='<%= train %>' required="required" class="form-control">
+                    label(for="route") Train Route:
+                    <input type="text" name="route" id="route" value='<%= route %>' required="required" class="form-control">
+                    label(for="run") Train Run:
+                    <input type="text" name="run" id="run" value='<%= run %>' required="required" class="form-control">
+                    label(for="operator") Train Operator:
+                    <input type="text" name="operator" id="operator" value='<%= operator %>' required="required" class="form-control">
+                .modal-footer
+                    button.btn.btn-default(type='button', data-dismiss='modal') Close
+                    <button type="submit" class="btn btn-primary save-<%= type %>">Save</button>
+            
+
+
+
+                  
