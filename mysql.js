@@ -59,3 +59,53 @@ exports.getAll = function(callback) {
 };
 
 /* INSERT STATEMENTS */
+exports.insertRecord = function(data, callback) {
+    var sql = "INSERT INTO trains"+
+    "(train_line, train_route, train_run, train_operator)"+
+     "VALUES (?, ?,?,?)";
+    console.log(sql);
+
+    // get a connection from the pool
+    pool.getConnection(function(err, connection) {
+        if(err){
+            console.log(err);
+            callback(true);
+            return;
+        }
+        // make the query
+        connection.query(sql,[data.train, data.route, data.run, data.operator], function(err, results) {
+            if(err) {
+                console.log(err);
+                callback(true);
+                return;
+            }
+            connection.release();
+
+            callback(false, results);
+        });
+    });
+};
+/* DELETE STATEMENTS */
+exports.deleteRecords = function(records, callback) {
+    var sql = "DELETE FROM trains where id IN (?)";
+
+    // get a connection from the pool
+    pool.getConnection(function(err, connection) {
+        if(err){
+            console.log(err);
+            callback(true);
+            return;
+        }
+        // make the query
+        connection.query(sql,[records], function(err, results) {
+            if(err) {
+                console.log(err);
+                callback(true);
+                return;
+            }
+            connection.release();
+
+            callback(false, results);
+        });
+    });
+};

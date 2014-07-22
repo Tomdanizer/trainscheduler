@@ -23,7 +23,7 @@ router.get('/', function(req, res) {
 });
 router.get('/data.json', function(req, res) {
     db.getAll(function(err, schedules) {
-        console.log(schedules);
+
         if(err) { 
             res.send(500,"Server Error"); 
                  return;
@@ -36,7 +36,7 @@ router.get('/data.json', function(req, res) {
 });
 router.post('/data.json', function(req, res) {
     db.getAll(function(err, schedules) {
-        console.log(schedules);
+
         if(err) { 
             res.send(500,"Server Error"); 
                  return;
@@ -46,6 +46,36 @@ router.post('/data.json', function(req, res) {
         obj.data = schedules;
         res.send(obj);
     });
+});
+router.post('/add', function(req,res,next){
+    console.log(req.body);
+    db.insertRecord(req.body, function(err, results) {
+        console.log(results);
+        if(err) {
+            res.send(500,"Server Error");
+            return;
+        }
+        // Respond with results as JSON
+        var obj = {};
+        obj.add = results.affectedRows;
+        res.send(obj);
+    });
+
+});
+router.post('/delete', function(req,res, next){
+
+    db.deleteRecords(req.body.records, function(err, results) {
+        console.log(results);
+        if(err) {
+            res.send(500,"Server Error");
+            return;
+        }
+        // Respond with results as JSON
+        var obj = {};
+        obj.deleted = results.affectedRows;
+        res.send(obj);
+    });
+
 });
 router.post('/upload', function(req, res,next){
 var fstream, fileExtension, filepath;
@@ -76,22 +106,13 @@ var fstream, fileExtension, filepath;
 
                         console.log(results);
                         // Respond with results as JSON
-                        db.getAll(function(err, schedules) {
-                            console.log(schedules);
-                            if(err) {
-                                res.send(500,"Server Error");
-                                return;
-                            }
-                            // Respond with results as JSON
-                            res.render('tables/traintable', {trainSchedules: schedules}, function(err, html){
-                                var htmlObj = {};
-                                htmlObj.schedulesHTML = html;
-                                res.render('status', {status: "Total " + results.message.replace("/", "") + " Updated: " + results.affectedRows}, function(err, html){
-                                    htmlObj.statusHTML = html;
+
+
+                                    var htmlObj = {};
+                                    htmlObj.statusHTML = "Inserted " + results.affectedRows + " rows";
+                                    htmlObj.type = "success";
                                     res.send(htmlObj);
-                                });
-                            });
-                        });
+
                     });
                 });
             }else{
