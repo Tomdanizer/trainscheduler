@@ -55,25 +55,45 @@ var table = (function(){
         console.log("new");
 
     },
+    /*
+        Handles clicks on the edit column control.
+     */
     editRecordClick = function(){
         console.log('edit');
         var data = getRowData();
     },
+    /*
+        Handles clicks on the delete column checkboxes.
+     */
     deleteRecordClick = function(){
         console.log('delete');
         var checkedCount = $(".delete-record:checked").length,
             deleteButton = $("#delete_rows"),
             data = getRowData.apply(this);
+
+        //If there are no checkboxes checked, disable the delete button
+        //Todo, this can probably changed to check against the checkedID array to avoid having to do a selector on everything.
         (checkedCount > 0) ? deleteButton.toggleClass("disabled", false) : deleteButton.toggleClass("disabled", true);
+
+        //If this checkbox is checked, add it to the array, otherwise remove it
         ($(this).prop('checked') ? checkedId.push(data.id) : checkedId.splice(checkedId.indexOf(data.id), 1));
         console.log(checkedId);
     },
+
+    /*
+        Posts form data from the form_add modal to be inserted into the database
+     */
     addRecord = function(e){
+        //Prevent default form submit
         e.preventDefault();
+
+        //Hide and then remove the add form modal
         $("#modal_add").modal('hide')
         $('#modal_add').on('hidden.bs.modal', function (e) {
             $(this).remove();
-        })
+        });
+
+        //Serialize form data into a json object and send it as a post
         var json = $(this).serializeObject();
         $.ajax({
             url: "/add",
@@ -87,6 +107,10 @@ var table = (function(){
             }
         });
     },
+
+    /*
+     Sends all the checked rows as post data to be deleted
+     */
     deleteRecord = function(){
         $.ajax({
             url: "/delete",
@@ -100,12 +124,17 @@ var table = (function(){
             }
         });
     },
+
+    /*
+        Grabs current rows data attributes
+     */
     getRowData = function(){
         return  dtable.row( $(this).parents('tr') ).data();
     },
-    displayModal = function(html){
 
-    },
+    /*
+        Reloads data in the datatable via ajax url in the datatable config.
+     */
     reload = function(){
         dtable.ajax.reload();
     };
