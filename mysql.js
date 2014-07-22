@@ -1,5 +1,13 @@
-var mysql      = require('mysql');
+/*
+    TODO
+    Drag and drop file
+    Upload Progress Bar
+    CSS styling
+    Color scheme
+*/
 
+var mysql      = require('mysql');
+var escape = require('escape-html');
 var pool = mysql.createPool({
     host     : 'localhost',
     user     : 'root',
@@ -10,7 +18,7 @@ var pool = mysql.createPool({
 
 /* CSV PARSING */
 exports.loadCSV = function(filename, callback) {
-    var sql = "LOAD DATA LOCAL INFILE '" + filename +"' INTO TABLE trains FIELDS TERMINATED BY ',' LINES TERMINATED BY ? IGNORE 1 LINES (train_line, train_route, train_run, train_operator)";
+    var sql = "LOAD DATA LOCAL INFILE '" + filename +"' REPLACE INTO TABLE trains FIELDS TERMINATED BY ',' IGNORE 1 LINES (train_line, train_route, train_run, train_operator)";
 
     // get a connection from the pool
     pool.getConnection(function(err, connection) {
@@ -20,7 +28,7 @@ exports.loadCSV = function(filename, callback) {
             return;
         }
         // make the query
-        connection.query(sql,["\r\n"], function(err, results) {
+        connection.query(sql, function(err, results) {
             if(err) {
                 console.log(err);
                 callback(true);
@@ -60,6 +68,7 @@ exports.getAll = function(callback) {
 
 /* INSERT STATEMENTS */
 exports.insertRecord = function(data, callback) {
+    //SQL Query, ? marks are placeholders that get automatically escaped via connection.query
     var sql = "INSERT INTO trains"+
     "(train_line, train_route, train_run, train_operator)"+
      "VALUES (?, ?,?,?)";
@@ -72,7 +81,7 @@ exports.insertRecord = function(data, callback) {
             callback(true);
             return;
         }
-        // make the query
+        // make the query - 
         connection.query(sql,[data.train, data.route, data.run, data.operator], function(err, results) {
             if(err) {
                 console.log(err);
@@ -87,6 +96,7 @@ exports.insertRecord = function(data, callback) {
 };
 /* DELETE STATEMENTS */
 exports.deleteRecords = function(records, callback) {
+    //SQL Query, ? marks are placeholders that get automatically escaped via connection.query
     var sql = "DELETE FROM trains where id IN (?)";
 
     // get a connection from the pool
@@ -98,6 +108,32 @@ exports.deleteRecords = function(records, callback) {
         }
         // make the query
         connection.query(sql,[records], function(err, results) {
+            if(err) {
+                console.log(err);
+                callback(true);
+                return;
+            }
+            connection.release();
+
+            callback(false, results);
+        });
+    });
+};
+
+/*UPDATE STATEMENTS*/
+exports.updateRecord = function(record, callback) {
+    //SQL Query, ? marks are placeholders that get automatically escaped via connection.query
+    var sql = "UPDATE trains SET train_line = ?, train_route = ?, train_run = ?, train_operator = ? WHERE id = ?";
+
+    // get a connection from the pool
+    pool.getConnection(function(err, connection) {
+        if(err){
+            console.log(err);
+            callback(true);
+            return;
+        }
+        // make the query
+        connection.query(sql,[record.train, record.route, record.run, record.operator, record.id], function(err, results) {
             if(err) {
                 console.log(err);
                 callback(true);

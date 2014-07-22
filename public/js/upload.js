@@ -22,11 +22,29 @@ var upload = (function(){
                 contentType: false,
                 data:data,
                 complete: function (data) {
-                    var htmlObj = data.responseJSON;
-                   console.log(htmlObj.schedulesHTML);
+                    //Reset form to allow same file uploads.
+                    $("#file_upload").parents("form")[0].reset();
+                    switch(data.status){
+                        case 200:
+                            var htmlObj = data.responseJSON;
+                            common.displayStatus(htmlObj.statusHTML, htmlObj.type);
+                            table.reload();
+                            break;
+                        case 300:
+                            common.displayStatus(data.responseText, "warning");
+                            break;
+                        case 500:
+                            common.displayStatus(data.responseText, "danger");
+                            break;
+                        default:
+                            common.displayStatus("<strong>Status:</strong> " + data.status + "<br> <strong>Status Text:</strong> " + data.statusText + "<br> <strong>Message:</strong>  " + data.responseText, "danger");
+                            break;
+                    }
+                    
+                   //console.log(htmlObj.schedulesHTML);
                    //$('#status_header').html(htmlObj.statusHTML);
-                   common.displayStatus(htmlObj.statusHTML, htmlObj.type);
-                    table.reload();
+                   
+                    //table.reload();
                    //$('#schedule_container').html(htmlObj.schedulesHTML);
                     //document.location.reload(true);
                 }

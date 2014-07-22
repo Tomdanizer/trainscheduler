@@ -3,6 +3,7 @@ var router = express.Router();
 var db = require('../mysql.js');
 var fs = require('fs');
 var busboy = require('connect-busboy');
+var escape = require('escape-html');
 
 /*
  *  Get index page page initial query request of all train schedules
@@ -77,6 +78,21 @@ router.post('/delete', function(req,res, next){
     });
 
 });
+router.post('/edit', function(req,res,next){
+    console.log(req.body);
+    db.updateRecord(req.body, function(err, results) {
+        console.log(results);
+        if(err) {
+            res.send(500,"Server Error");
+            return;
+        }
+        // Respond with results as JSON
+        var obj = {};
+        obj.results = results.affectedRows;
+        res.send(obj);
+    });
+});
+
 router.post('/upload', function(req, res,next){
 var fstream, fileExtension, filepath;
         req.pipe(req.busboy);
@@ -84,11 +100,13 @@ var fstream, fileExtension, filepath;
             console.log("Uploading: " + filename);
             fileExtension = filename.split('.')[filename.split('.').length - 1].toLowerCase();
             mimetype = mimetype.toLowerCase();
+            console.log(mimetype);
             if(mimetype === 'application/csv' ||  
                 mimetype === 'application/excel' || 
                 mimetype === 'application/vnd.ms-excel' || 
                 mimetype === 'application/vnd.msexcel' || 
                 mimetype === 'text/anytext' ||
+                mimetype === 'text/csv' ||
                 mimetype === 'text/comma-separated-values' ||(mimetype === 'application/octet-stream' && fileExtension === 'csv')){
                 //Mime type is of CSV type
 
@@ -100,24 +118,22 @@ var fstream, fileExtension, filepath;
                     console.log("Upload Finished of " + filename);
                     db.loadCSV(filepath, function(err, results) {
                         if(err) {
+                            console.log(err);
                             res.send(500,"Server Error");
                             return;
                         }
-
                         console.log(results);
                         // Respond with results as JSON
-
-
                                     var htmlObj = {};
-                                    htmlObj.statusHTML = "Inserted " + results.affectedRows + " rows";
+                                    //htmlObj.statusHTML = "Inserted " + results.affectedRows + " rows";
+                                    htmlObj.statusHTML = "Inserted " + results.message.substring(1);
                                     htmlObj.type = "success";
                                     res.send(htmlObj);
 
                     });
                 });
             }else{
-                //Not a CSV, error
-                res.send(500,"Server Error"); 
+                res.send(300,"Please upload a valid CSV file"); 
                  return;
             }
             

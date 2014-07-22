@@ -60,7 +60,19 @@ var table = (function(){
      */
     editRecordClick = function(){
         console.log('edit');
-        var data = getRowData();
+        var data = getRowData.apply(this);
+        var addTemplate = _.template($('#modal_template').html()),
+            html = addTemplate({
+                                title:"Edit train",
+                                train: data.train_line,
+                                route: data.train_route,
+                                run: data.train_run,
+                                operator: data.train_operator,
+                                type: "edit"
+                                });
+        $("body").append(html);
+        $("#modal_edit").modal('show');
+        $('#form_edit').on('submit', { id : data.id }, editRecord);
     },
     /*
         Handles clicks on the delete column checkboxes.
@@ -94,7 +106,7 @@ var table = (function(){
         });
 
         //Serialize form data into a json object and send it as a post
-        var json = $(this).serializeObject();
+        var json = $(this).serializeObjectEscapedValue();
         $.ajax({
             url: "/add",
             type: "POST",
@@ -107,7 +119,31 @@ var table = (function(){
             }
         });
     },
+    editRecord = function(e){
+        //Prevent default form submit
+        e.preventDefault();
 
+        //Hide and then remove the add form modal
+        $("#modal_edit").modal('hide')
+        $('#modal_edit').on('hidden.bs.modal', function (e) {
+            $(this).remove();
+        });
+        $(this)
+        //Serialize form data into a json object and send it as a post
+        var json = $(this).serializeObjectEscapedValue();
+        json.id = e.data.id;
+        $.ajax({
+            url: "/edit",
+            type: "POST",
+            data:json,
+            complete: function (data) {
+                var results = data.responseJSON.results;
+                common.displayStatus("Updated " + results + " rows.", "success");
+                reload();
+                //document.location.reload(true);
+            }
+        });
+    },
     /*
      Sends all the checked rows as post data to be deleted
      */

@@ -20,6 +20,22 @@ $.fn.serializeObject = function()
     return o;
 };
 
+$.fn.serializeObjectEscapedValue = function()
+{
+    var o = {};
+    var a = this.serializeArray();
+    $.each(a, function() {
+        if (o[this.name] !== undefined) {
+            if (!o[this.name].push) {
+                o[this.name] = [o[this.name]];
+            }
+            o[this.name].push(_.escape(this.value) || '');
+        } else {
+            o[this.name] = _.escape(this.value) || '';
+        }
+    });
+    return o;
+};
 var common = (function(){
     /*
         Status alert templates via underscorejs
