@@ -1,4 +1,4 @@
-form#schedule_form.table.form-list(action='/', method='POST', role='form')
+form#schedule_form.table.form-list(action='/delete', method='POST', role='form')
     div.table-responsive: table#schedule_table.table.table-hover.table-striped
             thead
                 tr
@@ -15,6 +15,6 @@ form#schedule_form.table.form-list(action='/', method='POST', role='form')
 
     .pull-right
         .btn-toolbar
-            button(type="button").btn.btn-success Add
-            button(type="button").btn.btn-primary Save
+            button#add_rows(type="button").btn.btn-success Add
+            button#delete_rows(type="button").btn.btn-danger.disabled Delete
                         
