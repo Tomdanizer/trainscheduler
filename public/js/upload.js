@@ -24,8 +24,10 @@ var upload = (function(){
                 complete: function (data) {
                     var htmlObj = data.responseJSON;
                    console.log(htmlObj.schedulesHTML);
-                   $('#status_header').html(htmlObj.statusHTML);
-                   $('#schedule_container').html(htmlObj.schedulesHTML);
+                   //$('#status_header').html(htmlObj.statusHTML);
+                   common.displayStatus(htmlObj.statusHTML, htmlObj.type);
+                    table.reload();
+                   //$('#schedule_container').html(htmlObj.schedulesHTML);
                     //document.location.reload(true);
                 }
             });
