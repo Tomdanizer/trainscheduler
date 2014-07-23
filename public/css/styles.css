@@ -19,3 +19,9 @@
     cursor: inherit;
     display: block;
 }
+.edit-record:hover{
+    cursor: pointer;
+}
+.btn-toolbar{
+    margin-top: 5px;
+}
