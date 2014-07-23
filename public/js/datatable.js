@@ -8,7 +8,8 @@ var table = (function(){
         //Data table configuration. Calls data.json URL which queries DB for results
 
         dtable = $('#schedule_table').DataTable({
-            "order": [[ 2, "asc" ]],
+            "bAutoWidth": false,
+            "order": [[ 3, "asc" ]],
               "ajax": {
                 "url": "data.json",
                 "type": "POST",
@@ -17,6 +18,7 @@ var table = (function(){
                         //Display message.
                         common.displayStatus("It looks like the table is empty! To get started, either click the <span class='label label-success'>Upload CSV</span> button, or simply drag and drop a csv file to the page!", "info", 15000);
                         $(".dataTables_empty").text("No data available in table");
+
                     }
                 },
                 "error": function(e){
@@ -42,11 +44,16 @@ var table = (function(){
                 ],
             "deferRender": true
         });
+
+        //Disables ajax alert box message that gets thrown by the datatable.
         $.fn.dataTable.ext.errMode = 'throw';
+
+        //Removes the fixed set width by the datatable to allow it to autosize.
+
         //Table click handlers for CRUD ops
         tbody.on('click', '.edit-record', editRecordClick);
         tbody.on('click', '.delete-record', deleteRecordClick);
-        $('#delete_rows').on('click', deleteRecord);
+        $('#delete_rows').on('click', deleteRecordConfirm);
         $('#add_rows').on('click', newRecordClick);
 
     },
@@ -63,8 +70,6 @@ var table = (function(){
         $("body").append(html);
         $("#modal_add").modal('show');
         $('#form_add').on('submit', addRecord);
-        console.log("new");
-
     },
     /*
         Handles clicks on the edit column control.
@@ -111,10 +116,7 @@ var table = (function(){
         e.preventDefault();
 
         //Hide and then remove the add form modal
-        $("#modal_add").modal('hide')
-        $('#modal_add').on('hidden.bs.modal', function (e) {
-            $(this).remove();
-        });
+        hideModal($("#modal_add"));
 
         //Serialize form data into a json object and send it as a post
         var json = $(this).serializeObjectEscapedValue();
@@ -133,13 +135,9 @@ var table = (function(){
     editRecord = function(e){
         //Prevent default form submit
         e.preventDefault();
-
         //Hide and then remove the add form modal
-        $("#modal_edit").modal('hide')
-        $('#modal_edit').on('hidden.bs.modal', function (e) {
-            $(this).remove();
-        });
-        $(this)
+        hideModal($("#modal_edit"));
+
         //Serialize form data into a json object and send it as a post
         var json = $(this).serializeObjectEscapedValue();
         json.id = e.data.id;
@@ -155,10 +153,21 @@ var table = (function(){
             }
         });
     },
+    deleteRecordConfirm = function(){
+        var confirmTemplate = _.template($('#confirm_template').html()),
+            html = confirmTemplate({
+                title:"Confirm delete",
+                rowcount: checkedId.length
+            });
+        $("body").append(html);
+        $("#modal_confirm").modal('show');
+        $('#modal_confirm_delete').on('click', deleteRecord);
+    },
     /*
      Sends all the checked rows as post data to be deleted
      */
     deleteRecord = function(){
+        hideModal($("#modal_confirm"));
         $.ajax({
             url: "/delete",
             type: "POST",
@@ -166,12 +175,19 @@ var table = (function(){
             complete: function (data) {
                 var deleted = data.responseJSON.deleted;
                 common.displayStatus("Deleted " + deleted + " rows.", "success");
+                //Empty the array
+                checkedId.length = 0;
                 reload();
                 //document.location.reload(true);
             }
         });
     },
-
+    hideModal = function(modalElement){
+        modalElement.modal('hide')
+        modalElement.on('hidden.bs.modal', function (e) {
+            $(this).remove();
+        });
+    },
     /*
         Grabs current rows data attributes
      */

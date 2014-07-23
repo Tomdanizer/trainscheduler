@@ -36,7 +36,18 @@ html
                     button.btn.btn-default(type='button', data-dismiss='modal') Close
                     <button type="submit" class="btn btn-primary save-<%= type %>">Save</button>
             
-
+    script#confirm_template(type='text/template' class="template")
+        <div id="modal_confirm" class="modal fade">
+        .modal-dialog
+            .modal-content
+                .modal-header
+                    button.close(type='button', data-dismiss='modal', aria-hidden='true') &times;
+                    h4.modal-title <%= title %>
+                .modal-body
+                    p Are you sure you want to <strong>DELETE</strong> <%= rowcount %> rows?
+                .modal-footer
+                    button.btn.btn-default(type='button', data-dismiss='modal') Cancel
+                    <button id='modal_confirm_delete' type="button" class="btn btn-danger">Delete</button>
 
 
                   
