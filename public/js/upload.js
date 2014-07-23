@@ -5,9 +5,40 @@ var upload = (function(){
     var init = function() {
             //Add listeners
             $('#file_upload').on('change', handleFileSelect);
+            $(document).on('dragenter', fileDragEnter);
+            $(document).on('dragover', fileDragOver);    
+            $(document).on('drop', fileDrop);  
+        },
+        fileDragEnter = function(evt){
+            evt.preventDefault();
+            evt.stopPropagation();
+            
+
+        },
+        fileDragOver = function(evt){
+            evt.preventDefault();
+            evt.stopPropagation();
+            
+            common.displayStatus("Drag Release file to upload!", "info", 6000);
+        },
+        fileDrop = function(evt){
+            evt.preventDefault();
+            evt.stopPropagation();
+            console.log(evt);
+
+            var files = evt.target.files = evt.originalEvent.dataTransfer.files;
+            var data = new FormData();
+            $.each(files, function(key, value)
+            {
+                data.append(key, value);
+            });
+            console.log(files);
+             //We need to send dropped files to Server
+             uploadFile(data);
         },
         handleFileSelect = function(evt){
             console.log("SELECT");
+            console.log(evt);
             var files = evt.target.files; // FileList object
             var data = new FormData();
             $.each(files, function(key, value)
@@ -15,6 +46,10 @@ var upload = (function(){
                 data.append(key, value);
             });
             console.log(files);
+            uploadFile(data);
+
+        },
+        uploadFile = function(data){
             $.ajax({
                 url: "/upload",
                 type: "POST",

@@ -9,18 +9,10 @@ var escape = require('escape-html');
  *  Get index page page initial query request of all train schedules
  */
 router.get('/', function(req, res) {
-    db.getAll(function(err, schedules) {
-        if(err) { 
-            res.send(500,"Server Error"); 
-                 return;
-            }
-        // Respond with results as JSON
         res.render('index', {   
                                 title: 'Train Scheduler',
-                                trainSchedules: ""
                             }
         );
-    });
 });
 router.get('/data.json', function(req, res) {
     db.getAll(function(err, schedules) {
@@ -39,7 +31,7 @@ router.post('/data.json', function(req, res) {
     db.getAll(function(err, schedules) {
 
         if(err) { 
-            res.send(500,"Server Error"); 
+            res.send(500,"Unable to fetch data. Please check that MySQL server is running."); 
                  return;
             }
         // Respond with results as JSON

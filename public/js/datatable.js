@@ -6,11 +6,22 @@ var table = (function(){
         var tbody = $('#schedule_table tbody');
 
         //Data table configuration. Calls data.json URL which queries DB for results
+
         dtable = $('#schedule_table').DataTable({
             "order": [[ 2, "asc" ]],
               "ajax": {
                 "url": "data.json",
-                "type": "POST"
+                "type": "POST",
+                "complete" : function(e){
+                    if(e.responseJSON.data.length === 0){
+                        //Display message.
+                        common.displayStatus("It looks like the table is empty! To get started, either click the <span class='label label-success'>Upload CSV</span> button, or simply drag and drop a csv file to the page!", "info", 15000);
+                        $(".dataTables_empty").text("No data available in table");
+                    }
+                },
+                "error": function(e){
+                    $(".dataTables_empty").text(e.responseText);
+                  },
               },
               "columns": [
                     {
@@ -31,7 +42,7 @@ var table = (function(){
                 ],
             "deferRender": true
         });
-
+        $.fn.dataTable.ext.errMode = 'throw';
         //Table click handlers for CRUD ops
         tbody.on('click', '.edit-record', editRecordClick);
         tbody.on('click', '.delete-record', deleteRecordClick);
