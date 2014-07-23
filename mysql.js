@@ -1,9 +1,6 @@
 /*
     TODO
-    Drag and drop file
     Upload Progress Bar
-    CSS styling
-    Color scheme
 */
 
 var mysql      = require('mysql');
