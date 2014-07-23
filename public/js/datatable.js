@@ -21,7 +21,7 @@ var table = (function(){
                 },
                 "error": function(e){
                     $(".dataTables_empty").text(e.responseText);
-                  },
+                  }
               },
               "columns": [
                     {

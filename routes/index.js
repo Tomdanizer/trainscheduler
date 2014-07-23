@@ -10,7 +10,7 @@ var escape = require('escape-html');
  */
 router.get('/', function(req, res) {
         res.render('index', {   
-                                title: 'Train Scheduler',
+                                title: 'Train Scheduler'
                             }
         );
 });

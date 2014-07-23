@@ -9,10 +9,17 @@
 var mysql      = require('mysql');
 var escape = require('escape-html');
 var pool = mysql.createPool({
+/*
     host     : 'localhost',
     user     : 'root',
     password : 'rootme',
     database : 'trainschedule',
+*/
+
+     user     : 'b91e0ad9f64b24',
+     password : '88032822bb662ea ',
+     database : 'heroku_0425afe26fa5d84',
+
     connectionLimit: 10
 });
 
