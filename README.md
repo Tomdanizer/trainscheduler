@@ -10,6 +10,9 @@
 5. In the directory **trainscheduler** run the command
    * `npm install`
    * This will install any required packages defined in packages.json
-6. Start the webserver with the command
+6. If you want to run the unit tests located in test.js, you will need to install mocha globally
+   * `npm install mocha -g`
+   * To execute the tests, run `mocha test.js` inside the **trainscheduler** directory.
+7. Start the webserver with the command
    * `node web.js`
    * Open your browser to [http://localhost:3000](http://localhost:3000) or whatever port is listed in the command line.
