@@ -12,6 +12,7 @@ var pool = mysql.createPool({
     password : 'rootme',
     database : 'trainschedule',
 */
+
      host     : 'us-cdbr-east-06.cleardb.net',
      user     : 'b91e0ad9f64b24',
      password : '88032822bb662ea',
