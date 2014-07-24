@@ -7,6 +7,7 @@
 2. Using mysqlworkbench import one of the .sql files to create the schema.
     * or using mysql command line use the command `mysql -u username -p trainschedule < file.sql`
 2. Install NodeJS [http://nodejs.org/](http://nodejs.org/) (Follow the README included with the download to install if not on windows)
+    * You will also want to make sure **npm** (node package manager) is installed. This should be done automatically with mac/windows.
 3. Run `git clone git@github.Tomdanizer/trainscheduler.git` or download the zip [https://github.com/Tomdanizer/trainscheduler/archive/master.zip](https://github.com/Tomdanizer/trainscheduler/archive/master.zip)
 4. Open up the nodejs/git command line/terminal & navigate to the **trainscheduler** directory.
 5. In the directory **trainscheduler** run the command
